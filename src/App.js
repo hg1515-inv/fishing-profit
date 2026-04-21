@@ -135,7 +135,7 @@ export default function App() {
                   style={styles.slider}
                   type="range"
                   min="0"
-                  max="50000"
+                  max="15000"
                   step="100"
                   value={trip.price}
                   onChange={(e) => setTrip({ ...trip, price: Number(e.target.value) })}
@@ -152,7 +152,7 @@ export default function App() {
                   style={styles.slider}
                   type="range"
                   min="0"
-                  max="200000"
+                  max="100000"
                   step="100"
                   value={trip.fuel}
                   onChange={(e) => setTrip({ ...trip, fuel: Number(e.target.value) })}
