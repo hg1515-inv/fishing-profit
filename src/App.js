@@ -85,34 +85,80 @@ export default function App() {
               <h2 style={styles.title}>🚤 データの入力</h2>
               <div style={styles.dateBadge}>{viewDate}</div>
             </div>
+            
+            {/* カスタムCSSの挿入 (スライダー用) */}
+            <style>{`
+              input[type=range] {
+                -webkit-appearance: none;
+                width: 100%;
+                height: 8px;
+                background: #e2e8f0;
+                border-radius: 5px;
+                outline: none;
+              }
+              input[type=range]::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                width: 28px;
+                height: 28px;
+                background: #2563eb;
+                border-radius: 50%;
+                cursor: pointer;
+                box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.4);
+              }
+            `}</style>
+
             <div style={styles.card}>
+              {/* 人数スライダー */}
               <div style={styles.formGroup}>
-                <label style={styles.label}>乗船人数 (人)</label>
+                <div style={styles.inputHeader}>
+                  <label style={styles.label}>乗船人数</label>
+                  <span style={styles.valueBadge}>{trip.people} 人</span>
+                </div>
                 <input
-                  style={styles.input}
-                  type="number"
+                  style={styles.slider}
+                  type="range"
+                  min="1"
+                  max="25"
+                  step="1"
                   value={trip.people}
                   onChange={(e) => setTrip({ ...trip, people: Number(e.target.value) })}
                 />
               </div>
+
+              {/* 料金スライダー */}
               <div style={styles.formGroup}>
-                <label style={styles.label}>乗船料金 (円/人)</label>
+                <div style={styles.inputHeader}>
+                  <label style={styles.label}>乗船料金</label>
+                  <span style={styles.valueBadge}>{trip.price.toLocaleString()} 円</span>
+                </div>
                 <input
-                  style={styles.input}
-                  type="number"
+                  style={styles.slider}
+                  type="range"
+                  min="0"
+                  max="50000"
+                  step="100"
                   value={trip.price}
                   onChange={(e) => setTrip({ ...trip, price: Number(e.target.value) })}
                 />
               </div>
+
+              {/* 燃料スライダー */}
               <div style={styles.formGroup}>
-                <label style={styles.label}>燃料代 (円)</label>
+                <div style={styles.inputHeader}>
+                  <label style={styles.label}>燃料代</label>
+                  <span style={styles.valueBadge}>{trip.fuel.toLocaleString()} 円</span>
+                </div>
                 <input
-                  style={styles.input}
-                  type="number"
+                  style={styles.slider}
+                  type="range"
+                  min="0"
+                  max="200000"
+                  step="100"
                   value={trip.fuel}
                   onChange={(e) => setTrip({ ...trip, fuel: Number(e.target.value) })}
                 />
               </div>
+
               <div style={styles.summaryBox}>
                 <div style={styles.summaryItem}>
                   <span>予想売上:</span>
@@ -125,6 +171,7 @@ export default function App() {
                   </span>
                 </div>
               </div>
+              
               <button style={styles.primaryButton} onClick={saveTrip}>データを保存する</button>
               <button style={styles.secondaryButton} onClick={() => setScreen("home")}>キャンセルして戻る</button>
             </div>
@@ -408,6 +455,23 @@ const styles = {
     borderRadius: "12px",
     boxSizing: "border-box",
     outline: "none",
+  },
+  slider: {
+    marginTop: "12px",
+    cursor: "pointer",
+  },
+  inputHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  valueBadge: {
+    backgroundColor: "#eff6ff",
+    color: "#2563eb",
+    padding: "4px 12px",
+    borderRadius: "8px",
+    fontSize: "16px",
+    fontWeight: "bold",
   },
   primaryButton: {
     width: "100%",
