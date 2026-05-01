@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 /**
  * 釣果管理アプリ (Fishing Profit)
@@ -11,11 +11,14 @@ export default function App() {
   const todayISO = new Date().toISOString().slice(0, 10);
   const [screen, setScreen] = useState("home");
   const [viewDate, setViewDate] = useState(todayISO); // 表示中の日付
+  const [viewMonth, setViewMonth] = useState(todayISO.slice(0, 7)); // 統計表示用の月
+  const dateInputRef = useRef(null);
+  const monthInputRef = useRef(null);
   
   const [trip, setTrip] = useState({
-    people: 6,
-    price: 8000,
-    fuel: 18000,
+    people: 5,
+    price: 5500,
+    fuel: 10000,
   });
   const [history, setHistory] = useState([]);
 
@@ -24,7 +27,7 @@ export default function App() {
     const saved = localStorage.getItem("fishing_history");
     if (saved) setHistory(JSON.parse(saved));
 
-    const last = localStorage.getItem("fishing_lastTrip");
+    const last = localStorage.getItem("fishing_lastTrip_v2");
     if (last) setTrip(JSON.parse(last));
   }, []);
 
@@ -58,7 +61,7 @@ export default function App() {
     
     setHistory(updated);
     localStorage.setItem("fishing_history", JSON.stringify(updated));
-    localStorage.setItem("fishing_lastTrip", JSON.stringify(trip));
+    localStorage.setItem("fishing_lastTrip_v2", JSON.stringify(trip));
 
     setScreen("home");
   };
@@ -66,9 +69,8 @@ export default function App() {
   // 表示中の日付のデータ
   const currentTrip = history.find((h) => h.date === viewDate);
 
-  // 当月の集計
-  const currentMonthStr = new Date().toISOString().slice(0, 7);
-  const monthlyData = history.filter((h) => h.date.startsWith(currentMonthStr));
+  // 選択月の集計
+  const monthlyData = history.filter((h) => h.date.startsWith(viewMonth));
   const monthlyProfit = monthlyData.reduce((sum, h) => sum + h.profit, 0);
   const monthlySales = monthlyData.reduce((sum, h) => sum + h.sales, 0);
 
@@ -179,13 +181,29 @@ export default function App() {
         );
 
       case "monthly":
+        const [year, month] = viewMonth.split("-");
         return (
           <>
             <div style={styles.header}>
-              <h2 style={styles.title}>📅 今月の統計</h2>
+              <h2 style={styles.title}>📊 収支統計</h2>
+              <div 
+                style={styles.datePickerContainer} 
+                onClick={() => monthInputRef.current && monthInputRef.current.showPicker()}
+              >
+                <input
+                  ref={monthInputRef}
+                  type="month"
+                  style={styles.datePickerInput}
+                  value={viewMonth}
+                  onChange={(e) => setViewMonth(e.target.value)}
+                />
+                <span style={styles.dateDisplay}>
+                  {year}年{month}月 ▾
+                </span>
+              </div>
             </div>
             <div style={{...styles.card, textAlign: "center", background: "linear-gradient(135deg, #0ea5e9, #2563eb)", color: "white"}}>
-              <p style={{margin: 0, opacity: 0.9, fontSize: "14px"}}>今月の純利益</p>
+              <p style={{margin: 0, opacity: 0.9, fontSize: "14px"}}>{year}年{month}月の純利益</p>
               <h1 style={{margin: "10px 0", fontSize: "32px"}}>{monthlyProfit.toLocaleString()} <span style={{fontSize: "18px"}}>円</span></h1>
               <div style={{display: "flex", justifyContent: "space-around", marginTop: "15px", fontSize: "14px", borderTop: "1px solid rgba(255,255,255,0.2)", paddingTop: "15px"}}>
                 <div>
@@ -198,10 +216,10 @@ export default function App() {
                 </div>
               </div>
             </div>
-            <h3 style={{...styles.label, marginTop: "25px"}}>履歴 (最新15件)</h3>
+            <h3 style={{...styles.label, marginTop: "25px"}}>選択月の履歴 ({monthlyData.length}件)</h3>
             <div style={{display: "flex", flexDirection: "column", gap: "10px"}}>
-              {history.length > 0 ? (
-                history.slice(0, 15).map((h) => (
+              {monthlyData.length > 0 ? (
+                monthlyData.map((h) => (
                   <div key={h.id} style={styles.historyCard} onClick={() => { setViewDate(h.date); setScreen("home"); }}>
                     <div style={{flex: 1}}>
                       <div style={{fontSize: "12px", color: "#64748b"}}>{h.date}</div>
@@ -213,7 +231,7 @@ export default function App() {
                   </div>
                 ))
               ) : (
-                <p style={{textAlign: "center", color: "#94a3b8", padding: "20px"}}>履歴がありません</p>
+                <p style={{textAlign: "center", color: "#94a3b8", padding: "20px"}}>この月の履歴はありません</p>
               )}
             </div>
             <button style={{...styles.secondaryButton, marginTop: "30px"}} onClick={() => setScreen("home")}>
@@ -230,8 +248,12 @@ export default function App() {
               <h2 style={styles.title}>🚤 釣行結果</h2>
               <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
                 <button style={styles.arrowButton} onClick={() => handleDateChange(-1)}>◀</button>
-                <div style={styles.datePickerContainer}>
+                <div 
+                  style={styles.datePickerContainer} 
+                  onClick={() => dateInputRef.current && dateInputRef.current.showPicker()}
+                >
                   <input
+                    ref={dateInputRef}
                     type="date"
                     style={styles.datePickerInput}
                     value={viewDate}
