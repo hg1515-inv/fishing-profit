@@ -188,7 +188,7 @@ export default function App() {
               <h2 style={styles.title}>📊 収支統計</h2>
               <div 
                 style={styles.datePickerContainer} 
-                onClick={() => monthInputRef.current && monthInputRef.current.showPicker()}
+                onClick={() => monthInputRef.current && typeof monthInputRef.current.showPicker === 'function' && monthInputRef.current.showPicker()}
               >
                 <input
                   ref={monthInputRef}
@@ -312,7 +312,7 @@ export default function App() {
                 <button style={styles.arrowButtonLarge} onClick={() => handleDateChange(-1)}>◀</button>
                 <div 
                   style={styles.datePickerContainerLarge} 
-                  onClick={() => dateInputRef.current && dateInputRef.current.showPicker()}
+                  onClick={() => dateInputRef.current && typeof dateInputRef.current.showPicker === 'function' && dateInputRef.current.showPicker()}
                 >
                   <input
                     ref={dateInputRef}
@@ -321,7 +321,7 @@ export default function App() {
                     value={viewDate}
                     onChange={(e) => setViewDate(e.target.value)}
                   />
-                  <span style={{fontSize: "16px", fontWeight: "bold"}}>
+                  <span style={{...styles.dateDisplay, fontSize: "16px", fontWeight: "bold"}}>
                     {viewDate.replace(/-/g, "/")} {isToday ? "(今日)" : ""}
                   </span>
                 </div>
