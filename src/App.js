@@ -248,10 +248,6 @@ export default function App() {
               <h2 style={styles.title}>🚤 釣行結果</h2>
             </div>
 
-            {!isToday && (
-              <button style={styles.todayButton} onClick={moveToday}>今日に戻る</button>
-            )}
-
             <div style={styles.card}>
               {currentTrip ? (
                 <>
@@ -309,23 +305,28 @@ export default function App() {
             
             {/* 下段の日付ナビゲーション（スマホ操作用） */}
             <div style={styles.bottomDateNav}>
-              <button style={styles.arrowButtonLarge} onClick={() => handleDateChange(-1)}>◀</button>
-              <div 
-                style={styles.datePickerContainerLarge} 
-                onClick={() => dateInputRef.current && dateInputRef.current.showPicker()}
-              >
-                <input
-                  ref={dateInputRef}
-                  type="date"
-                  style={styles.datePickerInput}
-                  value={viewDate}
-                  onChange={(e) => setViewDate(e.target.value)}
-                />
-                <span style={{fontSize: "16px", fontWeight: "bold"}}>
-                  {viewDate.replace(/-/g, "/")} {isToday ? "(今日)" : ""}
-                </span>
+              {!isToday && (
+                <button style={styles.todayButtonSmall} onClick={moveToday}>今日に戻る</button>
+              )}
+              <div style={styles.dateControlsRow}>
+                <button style={styles.arrowButtonLarge} onClick={() => handleDateChange(-1)}>◀</button>
+                <div 
+                  style={styles.datePickerContainerLarge} 
+                  onClick={() => dateInputRef.current && dateInputRef.current.showPicker()}
+                >
+                  <input
+                    ref={dateInputRef}
+                    type="date"
+                    style={styles.datePickerInput}
+                    value={viewDate}
+                    onChange={(e) => setViewDate(e.target.value)}
+                  />
+                  <span style={{fontSize: "16px", fontWeight: "bold"}}>
+                    {viewDate.replace(/-/g, "/")} {isToday ? "(今日)" : ""}
+                  </span>
+                </div>
+                <button style={styles.arrowButtonLarge} onClick={() => handleDateChange(1)}>▶</button>
               </div>
-              <button style={styles.arrowButtonLarge} onClick={() => handleDateChange(1)}>▶</button>
             </div>
           </>
         );
@@ -425,6 +426,7 @@ const styles = {
     height: "100%",
     opacity: 0,
     cursor: "pointer",
+    zIndex: 2,
   },
   dateDisplay: {
     pointerEvents: "none",
@@ -457,17 +459,35 @@ const styles = {
   },
   bottomDateNav: {
     position: "fixed",
-    bottom: "80px", // navBar(72px)の上
+    bottom: "80px", 
     left: "50%",
     transform: "translateX(-50%)",
     width: "100%",
     maxWidth: "480px",
     display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "10px",
+    padding: "0 16px",
+    zIndex: 90,
+  },
+  todayButtonSmall: {
+    backgroundColor: "#dbeafe",
+    color: "#2563eb",
+    border: "none",
+    padding: "6px 16px",
+    borderRadius: "20px",
+    fontSize: "12px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+  },
+  dateControlsRow: {
+    display: "flex",
     alignItems: "center",
     justifyContent: "center",
     gap: "12px",
-    padding: "0 16px",
-    zIndex: 90,
+    width: "100%",
   },
   arrowButtonLarge: {
     backgroundColor: "white",
