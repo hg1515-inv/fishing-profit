@@ -245,6 +245,18 @@ export default function App() {
               <h2 style={styles.title}>🚤 釣行結果</h2>
             </div>
 
+            <div style={{...styles.card, background: "#f8fafc", border: "1px solid #e2e8f0", marginBottom: "20px"}}>
+              <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+                <div>
+                  <span style={{fontSize: "14px", color: "#64748b"}}>今月の累計利益</span>
+                  <div style={{fontSize: "20px", fontWeight: "bold", color: "#1e293b"}}>{monthlyProfit.toLocaleString()} 円</div>
+                </div>
+                <button style={{...styles.secondaryButton, width: "auto", margin: 0, padding: "8px 16px", fontSize: "14px"}} onClick={() => setScreen("monthly")}>
+                  詳細表示
+                </button>
+              </div>
+            </div>
+
             <div style={styles.card}>
               {currentTrip ? (
                 <>
@@ -286,18 +298,6 @@ export default function App() {
                   </button>
                 </div>
               )}
-            </div>
-
-            <div style={{...styles.card, marginTop: "20px", background: "#f8fafc", border: "1px solid #e2e8f0"}}>
-              <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-                <div>
-                  <span style={{fontSize: "14px", color: "#64748b"}}>今月の累計利益</span>
-                  <div style={{fontSize: "20px", fontWeight: "bold", color: "#1e293b"}}>{monthlyProfit.toLocaleString()} 円</div>
-                </div>
-                <button style={{...styles.secondaryButton, width: "auto", margin: 0, padding: "8px 16px", fontSize: "14px"}} onClick={() => setScreen("monthly")}>
-                  詳細表示
-                </button>
-              </div>
             </div>
             
             {/* 下段の日付ナビゲーション（スマホ操作用） */}
