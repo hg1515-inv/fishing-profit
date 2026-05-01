@@ -246,25 +246,6 @@ export default function App() {
           <>
             <div style={styles.header}>
               <h2 style={styles.title}>🚤 釣行結果</h2>
-              <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
-                <button style={styles.arrowButton} onClick={() => handleDateChange(-1)}>◀</button>
-                <div 
-                  style={styles.datePickerContainer} 
-                  onClick={() => dateInputRef.current && dateInputRef.current.showPicker()}
-                >
-                  <input
-                    ref={dateInputRef}
-                    type="date"
-                    style={styles.datePickerInput}
-                    value={viewDate}
-                    onChange={(e) => setViewDate(e.target.value)}
-                  />
-                  <span style={styles.dateDisplay}>
-                    {viewDate.replace(/-/g, "/")} {isToday ? "(今日)" : ""}
-                  </span>
-                </div>
-                <button style={styles.arrowButton} onClick={() => handleDateChange(1)}>▶</button>
-              </div>
             </div>
 
             {!isToday && (
@@ -324,6 +305,27 @@ export default function App() {
                   詳細表示
                 </button>
               </div>
+            </div>
+            
+            {/* 下段の日付ナビゲーション（スマホ操作用） */}
+            <div style={styles.bottomDateNav}>
+              <button style={styles.arrowButtonLarge} onClick={() => handleDateChange(-1)}>◀</button>
+              <div 
+                style={styles.datePickerContainerLarge} 
+                onClick={() => dateInputRef.current && dateInputRef.current.showPicker()}
+              >
+                <input
+                  ref={dateInputRef}
+                  type="date"
+                  style={styles.datePickerInput}
+                  value={viewDate}
+                  onChange={(e) => setViewDate(e.target.value)}
+                />
+                <span style={{fontSize: "16px", fontWeight: "bold"}}>
+                  {viewDate.replace(/-/g, "/")} {isToday ? "(今日)" : ""}
+                </span>
+              </div>
+              <button style={styles.arrowButtonLarge} onClick={() => handleDateChange(1)}>▶</button>
             </div>
           </>
         );
@@ -446,11 +448,53 @@ const styles = {
     backgroundColor: "#dbeafe",
     color: "#2563eb",
     border: "none",
-    padding: "8px",
+    padding: "10px",
     borderRadius: "10px",
-    fontSize: "13px",
+    fontSize: "14px",
     fontWeight: "bold",
     marginBottom: "16px",
+    cursor: "pointer",
+  },
+  bottomDateNav: {
+    position: "fixed",
+    bottom: "80px", // navBar(72px)の上
+    left: "50%",
+    transform: "translateX(-50%)",
+    width: "100%",
+    maxWidth: "480px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "12px",
+    padding: "0 16px",
+    zIndex: 90,
+  },
+  arrowButtonLarge: {
+    backgroundColor: "white",
+    border: "1px solid #e2e8f0",
+    borderRadius: "12px",
+    width: "48px",
+    height: "48px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer",
+    fontSize: "18px",
+    color: "#475569",
+    boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1)",
+  },
+  datePickerContainerLarge: {
+    position: "relative",
+    backgroundColor: "white",
+    padding: "12px 20px",
+    borderRadius: "12px",
+    color: "#1e293b",
+    boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1)",
+    border: "1px solid #e2e8f0",
+    display: "flex",
+    alignItems: "center",
+    flex: 1,
+    justifyContent: "center",
     cursor: "pointer",
   },
   card: {
