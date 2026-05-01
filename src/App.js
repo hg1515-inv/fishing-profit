@@ -186,10 +186,7 @@ export default function App() {
           <>
             <div style={styles.header}>
               <h2 style={styles.title}>📊 収支統計</h2>
-              <div 
-                style={styles.datePickerContainer} 
-                onClick={() => monthInputRef.current && typeof monthInputRef.current.showPicker === 'function' && monthInputRef.current.showPicker()}
-              >
+              <label style={styles.datePickerContainer}>
                 <input
                   ref={monthInputRef}
                   type="month"
@@ -200,7 +197,7 @@ export default function App() {
                 <span style={styles.dateDisplay}>
                   {year}年{month}月 ▾
                 </span>
-              </div>
+              </label>
             </div>
             <div style={{...styles.card, textAlign: "center", background: "linear-gradient(135deg, #0ea5e9, #2563eb)", color: "white"}}>
               <p style={{margin: 0, opacity: 0.9, fontSize: "14px"}}>{year}年{month}月の純利益</p>
@@ -310,10 +307,7 @@ export default function App() {
               )}
               <div style={styles.dateControlsRow}>
                 <button style={styles.arrowButtonLarge} onClick={() => handleDateChange(-1)}>◀</button>
-                <div 
-                  style={styles.datePickerContainerLarge} 
-                  onClick={() => dateInputRef.current && typeof dateInputRef.current.showPicker === 'function' && dateInputRef.current.showPicker()}
-                >
+                <label style={styles.datePickerContainerLarge}>
                   <input
                     ref={dateInputRef}
                     type="date"
@@ -324,7 +318,7 @@ export default function App() {
                   <span style={{...styles.dateDisplay, fontSize: "16px", fontWeight: "bold"}}>
                     {viewDate.replace(/-/g, "/")} {isToday ? "(今日)" : ""}
                   </span>
-                </div>
+                </label>
                 <button style={styles.arrowButtonLarge} onClick={() => handleDateChange(1)}>▶</button>
               </div>
             </div>
@@ -424,9 +418,11 @@ const styles = {
     left: 0,
     width: "100%",
     height: "100%",
-    opacity: 0,
+    opacity: 0.01,
     cursor: "pointer",
     zIndex: 2,
+    WebkitAppearance: "none",
+    border: "none",
   },
   dateDisplay: {
     pointerEvents: "none",
